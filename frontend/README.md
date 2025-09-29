@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Real-time Chat Frontend (Next.js + App Router)
 
-## Getting Started
+## 🏗️ Cấu trúc thư mục
 
-First, run the development server:
+### 📁 `/src/app`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Next.js App Router** - routing và layout chính
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `layout.tsx` - Root layout (navbar, providers, global styles)
+- `page.tsx` - Homepage dashboard
+- `globals.css` - Global styles với Tailwind CSS
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🧩 `/src/components`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**React Components** - UI building blocks
 
-## Learn More
+#### `/components/layout`
 
-To learn more about Next.js, take a look at the following resources:
+- `NavigationBar.tsx` - Header với user info, search
+- `ChatList.tsx` - Sidebar danh sách conversations
+- `ChatZone.tsx` - Main chat area
+- `ChatDetail.tsx` - Right sidebar với chat info
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### `/components/conversationList`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `ConversationItem.tsx` - Chat item trong list
+- `SearchBar.tsx` - Search conversations và users
 
-## Deploy on Vercel
+#### `/components/conversationZone`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `MessageList.tsx` - Container hiển thị messages
+- `MessageItem.tsx` - Từng tin nhắn
+- `MessageInput.tsx` - Input gửi tin nhắn
+- `TypingIndicator.tsx` - "X đang nhập..."
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### `/components/conversationDetail`
+
+- `ChatInfo.tsx` - Thông tin chat
+- `MemberList.tsx` - Danh sách members
+- `SharedMedia.tsx` - Photos, files shared
+
+#### `/components/common`
+
+- `Avatar.tsx` - User avatars với online status
+- `Button.tsx` - Reusable buttons
+- `Modal.tsx` - Pop-up modals
+- `Loading.tsx` - Skeleton loaders
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS
+- **State**: Zustand (lightweight)
+- **Real-time**: Socket.IO Client
+- **Forms**: React Hook Form + Zod
+- **UI**: Headless UI components
+
+

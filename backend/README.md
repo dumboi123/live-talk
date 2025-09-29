@@ -1,98 +1,173 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Real-time Chat Backend (Nest.js + MVC Pattern)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 🏗️ Cấu trúc thư mục MVC
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### 📁 `/src/config`
 
-## Description
+**Chức năng**: Quản lý tất cả các cấu hình của ứng dụng
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- `database.config.ts` - Cấu hình kết nối Prisma/PostgreSQL
+- `jwt.config.ts` - Cấu hình JWT (secret, expiration time)
+- `socket.config.ts` - Cấu hình Socket.IO (CORS, adapter)
+- `app.config.ts` - Cấu hình tổng quát của app
 
-## Project setup
+### 🎮 `/src/controllers`
 
-```bash
-$ npm install
+**Chức năng**: Xử lý HTTP requests và responses (Layer Controller trong MVC)
+
+- `auth.controller.ts` - Endpoints đăng nhập, đăng ký, refresh token
+- `users.controller.ts` - CRUD user profiles, tìm kiếm user
+- `chats.controller.ts` - Quản lý conversations, chat rooms
+- `messages.controller.ts` - Gửi/sửa/xóa tin nhắn, lịch sử chat
+- `friends.controller.ts` - Hệ thống bạn bè (gửi lời mời, chấp nhận)
+- `groups.controller.ts` - Quản lý nhóm chat (tạo, thêm member, admin)
+- `media.controller.ts` - Upload/download hình ảnh, video, files
+
+### 🧠 `/src/services`
+
+**Chức năng**: Business Logic Layer - xử lý logic nghiệp vụ
+
+- `auth.service.ts` - Logic đăng nhập, hash password, validate JWT
+- `users.service.ts` - Logic quản lý user, tìm kiếm, cập nhật profile
+- `chats.service.ts` - Logic tạo chat room, quản lý participants
+- `messages.service.ts` - Logic gửi tin nhắn, reactions, reply, forward
+- `friends.service.ts` - Logic hệ thống bạn bè, gợi ý kết bạn
+- `groups.service.ts` - Logic nhóm chat, roles, permissions
+- `media.service.ts` - Logic upload, resize ảnh, compress video
+- `socket.service.ts` - Logic real-time events, room management
+
+### 🗄️ `/src/models`
+
+**Chức năng**: Data Models - định nghĩa cấu trúc dữ liệu (Model trong MVC)
+
+- `user.model.ts` - Model User (id, name, email, avatar, status)
+- `chat.model.ts` - Model Chat/Conversation
+- `message.model.ts` - Model Message (content, type, timestamp, reactions)
+- `friendship.model.ts` - Model quan hệ bạn bè
+- `group.model.ts` - Model Group chat
+- `group-member.model.ts` - Model thành viên nhóm với roles
+- `notification.model.ts` - Model thông báo
+- `media.model.ts` - Model file uploads
+
+### 💾 `/src/database`
+
+**Chức năng**: Database Layer - quản lý kết nối và truy vấn database
+
+- `prisma.service.ts` - Prisma client service
+- `/repositories/` - Repository Pattern cho từng entity
+  - `user.repository.ts` - Truy vấn database cho User
+  - `chat.repository.ts` - Truy vấn database cho Chat
+  - `message.repository.ts` - Truy vấn database cho Message
+  - `friend.repository.ts` - Truy vấn database cho Friendship
+
+### 📄 `/src/views`
+
+**Chức năng**: Response DTOs - format dữ liệu trả về cho client (View trong MVC)
+
+- `auth.view.ts` - Format response đăng nhập (user info + tokens)
+- `user.view.ts` - Format thông tin user profile
+- `chat.view.ts` - Format danh sách chat với tin nhắn cuối
+- `message.view.ts` - Format tin nhắn với sender info, reactions
+- `friend.view.ts` - Format danh sách bạn bè, lời mời kết bạn
+- `group.view.ts` - Format thông tin nhóm với members
+
+### 📝 `/src/dto`
+
+**Chức năng**: Data Transfer Objects - validation input từ client
+
+- `/auth/` - DTOs cho authentication (login, register)
+- `/users/` - DTOs cho user operations (update profile, search)
+- `/chats/` - DTOs cho chat operations (create chat, join room)
+- `/messages/` - DTOs cho messaging (send, edit, react)
+- `/friends/` - DTOs cho friend system (send request, accept)
+- `/groups/` - DTOs cho group management (create, add member)
+
+### 🔌 `/src/gateways`
+
+**Chức năng**: WebSocket Gateways - xử lý real-time communication
+
+- `chat.gateway.ts` - Real-time messaging, join/leave rooms
+- `presence.gateway.ts` - Online/offline status, last seen
+- `typing.gateway.ts` - Typing indicators trong chat
+
+### 🛡️ `/src/middleware`
+
+**Chức năng**: Middleware - xử lý requests trước khi đến controllers
+
+- `auth.middleware.ts` - Verify JWT tokens + validation logic
+- `rate-limit.middleware.ts` - Giới hạn số requests từ hackers
+
+### ⚡ `/src/pipes` (TÙY CHỌN)
+
+**Chức năng**: Pipes - transform và validate data (có thể thay bằng middleware)
+
+- `validation.pipe.ts` - Validate DTOs với class-validator
+- `transform.pipe.ts` - Transform data format
+
+### � `/src/guards` (TÙY CHỌN)
+
+**Chức năng**: Guards - bảo vệ routes (có thể làm trong controller)
+
+- `jwt-auth.guard.ts` - Bảo vệ HTTP endpoints
+- `ws-jwt.guard.ts` - Bảo vệ WebSocket connections
+
+### 🔧 `/src/utils`
+
+**Chức năng**: Utility functions - helper functions tái sử dụng
+
+- `bcrypt.util.ts` - Hash/compare passwords
+- `jwt.util.ts` - JWT operations (sign, verify)
+- `file.util.ts` - File operations (upload, resize)
+- `socket.util.ts` - Socket helper functions
+
+### 📊 `/prisma`
+
+**Chức năng**: Database Schema và migrations
+
+- `schema.prisma` - Database schema definition
+- `migrations/` - Database migrations
+- `seed.ts` - Database seeding cho development
+
+## 🎯 Quyết định thiết kế cho Real-time Chat:
+
+### ✅ **CORE MVC + NestJS PATTERNS**:
+
+1. **Controllers** - Handle HTTP requests only (thin controllers)
+2. **Services** - Business logic layer (fat services)
+3. **Guards** - Authentication & authorization (declarative)
+4. **Pipes** - Input validation & transformation (with DTOs)
+5. **Models** - Data structure definitions
+6. **Views** - Response formatting (DTOs)
+7. **Database/Repositories** - Data access layer
+8. **Gateways** - WebSocket real-time communication
+
+### 🛡️ **CROSS-CUTTING CONCERNS**:
+
+1. **Middleware** - Logging, CORS, rate limiting, validation
+2. **DTOs** - Type safety + runtime validation
+3. **Utils** - Reusable helper functions
+
+### 🏗️ **ARCHITECTURE PATTERN**:
+
+```
+┌─────────────────────────────────────┐
+│           NestJS Framework          │
+├─────────────────────────────────────┤
+│ Middleware → Guards → Pipes         │
+│      ↓          ↓       ↓           │
+│  Controllers → Services             │
+│      ↓          ↓                   │
+│ Views (DTOs) ← Repositories         │
+│                    ↓                │
+│                Database             │
+└─────────────────────────────────────┘
 ```
 
-## Compile and run the project
+## 🔄 Request Lifecycle theo NestJS:
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+Client Request → Middleware → Guards → Pipes → Controller → Service → Repository → Database
+                                                    ↓
+Client Response ← Views (DTOs) ← Controller ← Service ← Repository ← Database
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
