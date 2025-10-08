@@ -4,6 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Font variables */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-jetbrains);
+
   /* Radius tokens */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -162,7 +166,7 @@
 }
 
 @layer base {
-  * {
+  :where(*, *::before, *::after) {
     @apply border-border outline-ring/50;
   }
   body {
@@ -235,10 +239,10 @@
 @layer components {
   /* Message Bubbles */
   .chat-bubble-sent {
-    @apply bg-primary text-primary-foreground rounded-2xl rounded-br-md px-3 py-2 max-w-[280px] md:max-w-sm;
+    @apply bg-primary text-primary-foreground rounded-2xl rounded-br-md px-3 py-2 max-w-xs md:max-w-sm;
   }
   .chat-bubble-received {
-    @apply bg-muted text-foreground rounded-2xl rounded-bl-md px-3 py-2 max-w-[280px] md:max-w-sm;
+    @apply bg-muted text-foreground rounded-2xl rounded-bl-md px-3 py-2 max-w-xs md:max-w-sm;
   }
 
   /* Chat Items */
