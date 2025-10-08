@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Radius tokens */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -60,185 +61,104 @@
 }
 
 :root {
-  /* Typography Scale - Based on 1.125 ratio (Major Second) */
-  --font-size-xs: 0.75rem; /* 12px - Timestamps, metadata */
-  --font-size-sm: 0.875rem; /* 14px - Secondary text */
-  --font-size-base: 1rem; /* 16px - Body text, messages */
-  --font-size-lg: 1.125rem; /* 18px - Usernames, titles */
-  --font-size-xl: 1.25rem; /* 20px - Section headers */
-  --font-size-2xl: 1.5rem; /* 24px - Page titles */
-  --font-size-3xl: 1.875rem; /* 30px - App title */
-
-  /* Line Heights - Optimized for readability */
-  --line-height-tight: 1.25; /* Titles, headers */
-  --line-height-normal: 1.5; /* Body text, messages */
-  --line-height-relaxed: 1.625; /* Long form content */
-
-  /* Font Weights */
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-
-  /* Letter Spacing */
-  --letter-spacing-tight: -0.025em;
-  --letter-spacing-normal: 0;
-  --letter-spacing-wide: 0.025em;
-
-  /* Spacing Scale - 8pt grid system */
-  --spacing-px: 1px;
-  --spacing-0: 0;
-  --spacing-1: 0.25rem; /* 4px */
-  --spacing-2: 0.5rem; /* 8px */
-  --spacing-3: 0.75rem; /* 12px */
-  --spacing-4: 1rem; /* 16px */
-  --spacing-5: 1.25rem; /* 20px */
-  --spacing-6: 1.5rem; /* 24px */
-  --spacing-8: 2rem; /* 32px */
-  --spacing-10: 2.5rem; /* 40px */
-  --spacing-12: 3rem; /* 48px */
-  --spacing-16: 4rem; /* 64px */
-  --spacing-20: 5rem; /* 80px */
-
-  /* Rich Purple Chat Theme - Light Mode */
+  /* Base radius for calculations */
   --radius: 0.5rem;
 
-  /* Main backgrounds - Clean with purple accent */
-  --background: oklch(99% 0.003 300); /* Very light purple-white */
-  --foreground: oklch(15% 0.02 280); /* Dark purple-black text */
-
-  /* Card/Panel backgrounds - Pure white for contrast */
-  --card: oklch(100% 0 0); /* Pure white cards */
+  /* Light Mode Colors */
+  --background: oklch(99% 0.003 300);
+  --foreground: oklch(15% 0.02 280);
+  --card: oklch(100% 0 0);
   --card-foreground: oklch(15% 0.02 280);
-
-  /* Popover/Modal backgrounds */
   --popover: oklch(100% 0 0);
   --popover-foreground: oklch(15% 0.02 280);
-
-  /* Rich Purple Primary - Strong brand color */
-  --primary: oklch(58% 0.22 285); /* Deep vibrant purple #7c3aed */
-  --primary-foreground: oklch(100% 0 0); /* White text on primary */
-
-  /* Secondary surfaces - Light purple tint */
-  --secondary: oklch(96% 0.01 290); /* Light purple-gray */
+  --primary: oklch(58% 0.22 285);
+  --primary-foreground: oklch(100% 0 0);
+  --secondary: oklch(96% 0.01 290);
   --secondary-foreground: oklch(15% 0.02 280);
-
-  /* Muted/disabled states */
-  --muted: oklch(94% 0.008 290); /* Subtle purple-gray */
-  --muted-foreground: oklch(45% 0.015 280); /* Muted purple text */
-
-  /* Accent (hover states) - Interactive purple */
-  --accent: oklch(91% 0.015 290); /* Light purple for hover */
+  --muted: oklch(94% 0.008 290);
+  --muted-foreground: oklch(45% 0.015 280);
+  --accent: oklch(91% 0.015 290);
   --accent-foreground: oklch(15% 0.02 280);
-
-  /* Destructive - Vibrant red */
-  --destructive: oklch(55% 0.18 25); /* Strong red */
+  --destructive: oklch(55% 0.18 25);
   --destructive-foreground: oklch(100% 0 0);
-
-  /* Success - Vibrant green with purple undertone */
-  --success: oklch(65% 0.15 150); /* Rich green */
+  --success: oklch(65% 0.15 150);
   --success-foreground: oklch(100% 0 0);
-
-  /* Warning - Vibrant orange */
-  --warning: oklch(75% 0.15 65); /* Rich orange */
+  --warning: oklch(75% 0.15 65);
   --warning-foreground: oklch(15% 0.02 280);
+  --border: oklch(85% 0.01 290);
+  --input: oklch(98% 0.005 290);
+  --ring: oklch(58% 0.22 285);
 
-  /* Borders and inputs */
-  --border: oklch(85% 0.01 290); /* Purple-tinted border */
-  --input: oklch(98% 0.005 290); /* Light purple input bg */
-  --ring: oklch(58% 0.22 285); /* Focus ring - same as primary */
+  /* Chat Colors */
+  --chat-bubble-sent: oklch(58% 0.22 285);
+  --chat-bubble-received: oklch(94% 0.008 290);
+  --chat-timestamp: oklch(45% 0.015 280);
 
-  /* Chat-specific colors - DISTINCT from background */
-  --chat-bubble-sent: oklch(58% 0.22 285); /* Rich purple for sent */
-  --chat-bubble-received: oklch(94% 0.008 290); /* Light purple for received */
-  --chat-timestamp: oklch(45% 0.015 280); /* Muted purple timestamp */
-
-  /* Sidebar specific */
-  --sidebar: oklch(97% 0.005 290); /* Very light purple sidebar */
+  /* Sidebar Colors */
+  --sidebar: oklch(97% 0.005 290);
   --sidebar-foreground: oklch(15% 0.02 280);
   --sidebar-primary: oklch(58% 0.22 285);
   --sidebar-primary-foreground: oklch(100% 0 0);
-  --sidebar-accent: oklch(91% 0.015 290); /* Hover state */
+  --sidebar-accent: oklch(91% 0.015 290);
   --sidebar-accent-foreground: oklch(15% 0.02 280);
   --sidebar-border: oklch(85% 0.01 290);
   --sidebar-ring: oklch(58% 0.22 285);
 
-  /* Chart colors - Rich and vibrant */
-  --chart-1: oklch(58% 0.22 285); /* Primary purple */
-  --chart-2: oklch(65% 0.15 150); /* Success green */
-  --chart-3: oklch(55% 0.18 25); /* Destructive red */
-  --chart-4: oklch(75% 0.15 65); /* Warning orange */
-  --chart-5: oklch(62% 0.18 320); /* Secondary purple variant */
+  /* Chart Colors */
+  --chart-1: oklch(58% 0.22 285);
+  --chart-2: oklch(65% 0.15 150);
+  --chart-3: oklch(55% 0.18 25);
+  --chart-4: oklch(75% 0.15 65);
+  --chart-5: oklch(62% 0.18 320);
 }
 
 .dark {
-  /* Rich Purple Dark Theme - Deep and vibrant */
-
-  /* Main backgrounds - Deep purple with strong contrast */
-  --background: oklch(8% 0.025 280); /* Very deep purple-black */
-  --foreground: oklch(95% 0.01 300); /* Light purple-white text */
-
-  /* Card/Panel backgrounds - Elevated dark surfaces */
-  --card: oklch(15% 0.03 280); /* Dark purple cards */
+  /* Dark Mode Colors */
+  --background: oklch(8% 0.025 280);
+  --foreground: oklch(95% 0.01 300);
+  --card: oklch(15% 0.03 280);
   --card-foreground: oklch(95% 0.01 300);
-
-  /* Popover/Modal backgrounds */
   --popover: oklch(15% 0.03 280);
   --popover-foreground: oklch(95% 0.01 300);
-
-  /* Rich Purple Primary - Bright and vibrant for dark */
-  --primary: oklch(68% 0.25 285); /* Bright vibrant purple #a855f7 */
+  --primary: oklch(68% 0.25 285);
   --primary-foreground: oklch(100% 0 0);
-
-  /* Secondary surfaces - Rich purple */
-  --secondary: oklch(18% 0.035 280); /* Rich purple surfaces */
+  --secondary: oklch(18% 0.035 280);
   --secondary-foreground: oklch(95% 0.01 300);
-
-  /* Muted/disabled states */
   --muted: oklch(18% 0.035 280);
-  --muted-foreground: oklch(65% 0.02 300); /* Muted purple text */
-
-  /* Accent (hover states) - Interactive bright purple */
-  --accent: oklch(22% 0.04 280); /* Brighter purple for hover */
+  --muted-foreground: oklch(65% 0.02 300);
+  --accent: oklch(22% 0.04 280);
   --accent-foreground: oklch(95% 0.01 300);
-
-  /* Destructive - Bright red for dark */
-  --destructive: oklch(60% 0.2 25); /* Bright red */
+  --destructive: oklch(60% 0.2 25);
   --destructive-foreground: oklch(100% 0 0);
-
-  /* Success - Bright green */
-  --success: oklch(70% 0.18 150); /* Bright green for dark theme */
+  --success: oklch(70% 0.18 150);
   --success-foreground: oklch(100% 0 0);
-
-  /* Warning - Bright orange */
-  --warning: oklch(80% 0.18 65); /* Bright orange for visibility */
+  --warning: oklch(80% 0.18 65);
   --warning-foreground: oklch(8% 0.025 280);
+  --border: oklch(100% 0 0 / 15%);
+  --input: oklch(100% 0 0 / 8%);
+  --ring: oklch(68% 0.25 285);
 
-  /* Borders and inputs in dark mode */
-  --border: oklch(100% 0 0 / 15%); /* Subtle white border */
-  --input: oklch(100% 0 0 / 8%); /* Transparent input background */
-  --ring: oklch(68% 0.25 285); /* Bright focus ring */
+  /* Chat Colors Dark */
+  --chat-bubble-sent: oklch(68% 0.25 285);
+  --chat-bubble-received: oklch(18% 0.035 280);
+  --chat-timestamp: oklch(65% 0.02 300);
 
-  /* Chat-specific colors for dark mode - HIGH CONTRAST */
-  --chat-bubble-sent: oklch(68% 0.25 285); /* Bright purple for sent */
-  --chat-bubble-received: oklch(18% 0.035 280); /* Dark purple for received */
-  --chat-timestamp: oklch(65% 0.02 300); /* Muted purple timestamp */
-
-  /* Sidebar specific for dark mode */
-  --sidebar: oklch(12% 0.03 280); /* Very dark purple sidebar */
+  /* Sidebar Colors Dark */
+  --sidebar: oklch(12% 0.03 280);
   --sidebar-foreground: oklch(95% 0.01 300);
   --sidebar-primary: oklch(68% 0.25 285);
   --sidebar-primary-foreground: oklch(100% 0 0);
-  --sidebar-accent: oklch(22% 0.04 280); /* Hover state */
+  --sidebar-accent: oklch(22% 0.04 280);
   --sidebar-accent-foreground: oklch(95% 0.01 300);
   --sidebar-border: oklch(100% 0 0 / 15%);
   --sidebar-ring: oklch(68% 0.25 285);
 
-  /* Chart colors for dark mode - Bright and vibrant */
-  --chart-1: oklch(68% 0.25 285); /* Primary purple */
-  --chart-2: oklch(70% 0.18 150); /* Success green */
-  --chart-3: oklch(60% 0.2 25); /* Destructive red */
-  --chart-4: oklch(80% 0.18 65); /* Warning orange */
-  --chart-5: oklch(72% 0.2 320); /* Secondary purple variant */
+  /* Chart Colors Dark */
+  --chart-1: oklch(68% 0.25 285);
+  --chart-2: oklch(70% 0.18 150);
+  --chart-3: oklch(60% 0.2 25);
+  --chart-4: oklch(80% 0.18 65);
+  --chart-5: oklch(72% 0.2 320);
 }
 
 @layer base {
@@ -246,96 +166,99 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    @apply bg-background text-foreground font-sans;
   }
 }
 
-/* Typography Utility Classes */
+/* Typography Classes */
+@layer components {
+  /* App Level */
+  .app-title {
+    @apply text-lg md:text-xl lg:text-2xl font-semibold tracking-tight leading-tight;
+  }
+  .page-heading {
+    @apply text-base md:text-lg lg:text-xl font-medium leading-tight;
+  }
+  .section-header {
+    @apply text-sm md:text-base lg:text-lg font-medium leading-tight;
+  }
 
-/* Display Classes - For major headings */
-.text-display-lg {
-  font-size: var(--font-size-3xl);
-  line-height: var(--line-height-tight);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--letter-spacing-tight);
+  /* Chat Conversation */
+  .chat-room-title {
+    @apply text-base md:text-lg lg:text-xl font-medium leading-tight;
+  }
+  .message-text {
+    @apply text-sm md:text-base leading-relaxed;
+  }
+  .message-username {
+    @apply text-xs md:text-sm font-medium leading-tight text-foreground;
+  }
+  .message-timestamp {
+    @apply text-xs font-mono leading-tight text-muted-foreground tracking-wide;
+  }
+
+  /* Chat List */
+  .chat-preview-text {
+    @apply text-xs md:text-sm leading-normal text-muted-foreground truncate;
+  }
+  .chat-last-message {
+    @apply text-xs md:text-sm leading-normal text-muted-foreground;
+  }
+  .chat-contact-name {
+    @apply text-sm md:text-base font-medium leading-tight;
+  }
+
+  /* Controls */
+  .input-text {
+    @apply text-sm md:text-base leading-normal;
+  }
+  .button-text {
+    @apply text-xs md:text-sm font-medium leading-tight;
+  }
+  .button-text-large {
+    @apply text-sm md:text-base font-medium leading-tight;
+  }
+
+  /* Status & Metadata */
+  .status-text {
+    @apply text-xs leading-tight text-muted-foreground;
+  }
+  .badge-text {
+    @apply text-xs leading-none font-medium;
+  }
+  .notification-count {
+    @apply text-xs leading-none font-semibold;
+  }
 }
 
-.text-display-md {
-  font-size: var(--font-size-2xl);
-  line-height: var(--line-height-tight);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--letter-spacing-tight);
+/* Chat Components */
+@layer components {
+  /* Message Bubbles */
+  .chat-bubble-sent {
+    @apply bg-primary text-primary-foreground rounded-2xl rounded-br-md px-3 py-2 max-w-[280px] md:max-w-sm;
+  }
+  .chat-bubble-received {
+    @apply bg-muted text-foreground rounded-2xl rounded-bl-md px-3 py-2 max-w-[280px] md:max-w-sm;
+  }
+
+  /* Chat Items */
+  .chat-item {
+    @apply p-3 hover:bg-accent/50 active:bg-accent cursor-pointer border-b border-border/50;
+  }
+  .chat-input-area {
+    @apply p-4 bg-background/95 backdrop-blur-sm border-t border-border;
+  }
 }
 
-/* Heading Classes - For section headers */
-.text-heading-lg {
-  font-size: var(--font-size-xl);
-  line-height: var(--line-height-tight);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-.text-heading-md {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-tight);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-/* Body Classes - For content text */
-.text-body-lg {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-normal);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-.text-body-md {
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-.text-body-sm {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-normal);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--letter-spacing-wide);
-}
-
-/* Specialized Classes - For specific use cases */
-.text-username {
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-tight);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-.text-timestamp {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--letter-spacing-wide);
-  font-family: var(--font-mono);
-}
-
-.text-message {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-relaxed);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-/* Chat-specific classes */
-.text-chat-preview {
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--letter-spacing-normal);
-  /* Truncate long previews */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* Avatar Components */
+@layer components {
+  .avatar-small {
+    @apply w-8 h-8 rounded-full;
+  }
+  .avatar-medium {
+    @apply w-10 h-10 md:w-12 md:h-12 rounded-full;
+  }
+  .avatar-large {
+    @apply w-12 h-12 md:w-14 md:h-14 rounded-full;
+  }
 }
