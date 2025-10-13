@@ -198,18 +198,15 @@
     @apply text-xs md:text-sm font-medium leading-tight text-foreground;
   }
   .message-timestamp {
-    @apply text-xs font-mono leading-tight text-muted-foreground tracking-wide;
+    @apply text-sm font-mono leading-tight text-muted-foreground tracking-wide;
   }
 
   /* Chat List */
   .chat-preview-text {
-    @apply text-xs md:text-sm leading-normal text-muted-foreground truncate;
-  }
-  .chat-last-message {
-    @apply text-xs md:text-sm leading-normal text-muted-foreground;
+    @apply text-base lg:text-lg leading-normal text-muted-foreground truncate;
   }
   .chat-contact-name {
-    @apply text-sm md:text-base font-medium leading-tight;
+    @apply text-lg lg:text-xl font-medium leading-tight;
   }
 
   /* Controls */

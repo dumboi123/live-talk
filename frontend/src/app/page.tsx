@@ -10,6 +10,7 @@ import NavigationBar from "@/components/layout/NavigationBar";
 export default function Home() {
   return (
     <div className="flex flex-row h-screen w-screen">
+      {/* <TypographyShowcase /> */}
       <NavigationBar />
       <ConversationList />
       <ConversationZone />

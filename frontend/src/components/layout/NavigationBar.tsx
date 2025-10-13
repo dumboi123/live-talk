@@ -3,9 +3,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageCircleMore, BookUser, Settings } from "lucide-react";
 export default function NavigationBar() {
   return (
-    <div className="flex flex-col bg-gray-800 text-white h-full w-20 py-4  justify-between">
+    <div className="flex flex-col bg-gray-800 text-white h-full w-20 py-5  justify-between">
       <div className="flex flex-col gap-8 items-center">
-        <Avatar className="w-10 h-10">
+        <Avatar className="w-15 h-15">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
