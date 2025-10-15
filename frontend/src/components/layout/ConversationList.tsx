@@ -44,14 +44,20 @@
 //   },
 // ];
 
+const data = 20;
 import ConversationItem from "../conversationList/ConversationItem";
 
 export default function ConversationList() {
   return (
     <div className="w-full lg:w-[420px] bg-card h-full overflow-x-hidden">
+      {
+        Array.from({ length: data }, (_, index) => (
+          <ConversationItem key={index} />
+        ))
+      }
+      {/* <ConversationItem />
       <ConversationItem />
-      <ConversationItem />
-      <ConversationItem />
+      <ConversationItem /> */}
     </div>
   );
 }

@@ -1,3 +1,9 @@
+import ChatItem from "./ChatItem";
+
 export default function ChatList() {
-  return <div>ChatList</div>;
+  return (<div>
+    <ChatItem />
+    <ChatItem />
+    <ChatItem />
+  </div>);
 }
