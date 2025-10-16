@@ -189,7 +189,7 @@
 
   /* Chat Conversation */
   .chat-room-title {
-    @apply text-base md:text-lg lg:text-xl font-medium leading-tight;
+    @apply text-lg md:text-xl lg:text-2xl font-medium leading-tight;
   }
   .message-text {
     @apply text-sm md:text-base leading-relaxed;
@@ -211,7 +211,7 @@
 
   /* Controls */
   .input-text {
-    @apply text-sm md:text-base leading-normal;
+    @apply text-lg md:text-xl leading-tight;
   }
   .button-text {
     @apply text-xs md:text-sm font-medium leading-tight;

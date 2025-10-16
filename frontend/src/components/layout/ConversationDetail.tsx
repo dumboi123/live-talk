@@ -1,6 +1,7 @@
 import SectionItemMain from "../conversationDetail/SectionItemMain";
 import SectionItemIcons from "../conversationDetail/SectionItemIcons";
 import SectionItemAttachments from "../conversationDetail/SectionItemAttachments";
+import { Trash } from "lucide-react";
 
 export default function ConversationDetail() {
   return (
@@ -10,11 +11,11 @@ export default function ConversationDetail() {
       </div>
       <div className="flex-1 overflow-auto space-y-3">
         <SectionItemMain />
-        <SectionItemIcons />
+        <SectionItemIcons icon= {Trash}/>
         <SectionItemAttachments />
         <SectionItemAttachments />
         <SectionItemAttachments />
-        <SectionItemIcons />
+        <SectionItemIcons icon={Trash} />
       </div>
     </div>
   );
