@@ -1,6 +1,7 @@
+'use client'
+
 import { FileImage, File, Sticker, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 export default function ChatToolbar() {
   return (
     <div className="w-full h-[50px] flex items-center border-b">
