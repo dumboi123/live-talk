@@ -1,3 +1,3 @@
 export default function Section() {
-  return <div>Section</div>;
+  return <div className="bg-gray-800">Section</div>;
 }

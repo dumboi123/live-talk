@@ -5,8 +5,8 @@ import { Trash } from "lucide-react";
 
 export default function ConversationDetail() {
   return (
-    <div className="hidden flex-col 2xl:flex 2xl:w-[420px] bg-green-800 text-white h-full">
-      <div className="bg-red-500 h-[80px] w-full items-center justify-center flex">
+    <div className="hidden flex-col 2xl:flex 2xl:w-[420px] text-white h-full">
+      <div className=" bg-gray-800 h-[80px] w-full items-center justify-center flex border-b border-l">
         <p className="page-heading">Thông tin</p>
       </div>
       <div className="flex-1 overflow-auto space-y-3">
