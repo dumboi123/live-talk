@@ -181,10 +181,10 @@
     @apply text-lg md:text-xl lg:text-2xl font-semibold tracking-tight leading-tight;
   }
   .page-heading {
-    @apply text-base md:text-lg lg:text-xl font-medium leading-tight;
+    @apply text-lg md:text-xl lg:text-2xl font-medium leading-tight;
   }
   .section-header {
-    @apply text-sm md:text-base lg:text-lg font-medium leading-tight;
+    @apply text-base md:text-lg lg:text-xl font-medium leading-tight;
   }
 
   /* Chat Conversation */

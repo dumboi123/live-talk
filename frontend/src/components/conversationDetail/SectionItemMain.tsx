@@ -8,7 +8,8 @@ import {
   PencilLine,
   Settings,
 } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+
 export default function SectionItemMain() {
   return (
     <div className="bg-gray-800 w-full h-[280px] flex flex-col items-center justify-center gap-5">
