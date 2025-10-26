@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: realtime-chat-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: realtime_chat
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      # PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "127.0.0.1:5432:5432"
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+    #   - ./backend/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - realtime-chat-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d realtime_chat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Tùy chọn: Redis cho caching/session storage
+  redis:
+    image: redis:7-alpine
+    container_name: realtime-chat-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - realtime-chat-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  realtime-chat-network:
+    driver: bridge
