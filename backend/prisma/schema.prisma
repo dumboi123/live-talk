@@ -1,11 +1,25 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma Schema for Real-time Chat App - MVP Version
+// Features: Direct/Group Chat, Voice/Video Call, Friend System, Block, Notifications
+// Forward Messages, Pin Messages, Mentions, Voice Messages, Media Gallery
+// Archive, Typing Indicator, Group Join Link, Chat Backup, Message Search, Starred Messages
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// ============================================
+// FUTURE FEATURES (Phase 2 - Not implemented yet):
+// ============================================
+// - File expiration: Auto-delete files after X days
+// - Privacy & Security:
+//   * Last seen privacy settings
+//   * Read receipts toggle
+//   * Screenshot notification
+// - Custom notification sounds per conversation
+// - Call Features:
+//   * Screen sharing in video calls
+//   * Call recording
+//   * Waiting room for group calls
+// ============================================
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
@@ -14,37 +28,367 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================
+// USER MANAGEMENT
+// ============================================
+
 model User {
-  id       Int      @id @default(autoincrement())
-  avatar    String?
-  email     String   @unique
-  name      String
-  displayName String?
-  password  String
-  friends   User[]
-  status    enum('Online', 'Offline', 'Busy')   @default("Online")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  email         String   @unique
+  phoneNumber   String?  @unique @map("phone_number")
+  username      String   @unique @map("username")
+  displayName   String   @map("display_name")
+  avatar        String?  @map("avatar")
+  
+  // Authentication
+  passwordHash  String  @map("password_hash")
+  
+  // Online status
+  isOnline      Boolean  @default(false) @map("is_online")
+  lastSeen      DateTime? @map("last_seen")
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  sentMessages         Message[]
+  conversationMembers  ConversationMember[]
+  messageReactions     MessageReaction[]
+  
+  // Friend system
+  sentFriendRequests     FriendRequest[] @relation("SentRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedRequests")
+  friends                Friends[]    @relation("UserFriends")
+  friendOf               Friends[]    @relation("FriendOfUser")
+  
+  // Block system
+  blockedUsers     BlockedUser[] @relation("BlockingUser")
+  blockedByUsers   BlockedUser[] @relation("BlockedUser")
+  
+  // Calls
+  initiatedCalls   Call[] @relation("CallInitiator")
+  callParticipants CallParticipant[]
+  
+  @@index([email])
+  @@index([username])
+  @@index([isOnline])
+  @@map("users")
 }
+
+// ============================================
+// FRIEND SYSTEM
+// ============================================
+
+model FriendRequest {
+  id          String   @id @default(uuid())
+  senderId    String  @map("sender_id")
+  sender      User     @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  receiverId  String  @map("receiver_id")
+  receiver    User     @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  
+  status      FriendRequestStatus @default(PENDING) @map("status")
+  message     String?  // Optional message with request
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+  @@index([senderId])
+  @@map("friend_requests")
+}
+
+model Friends {
+  id          String   @id @default(uuid())
+  userId      String  @map("user_id")
+  user        User     @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+  
+  friendId    String  @map("friend_id")
+  friend      User     @relation("FriendOfUser", fields: [friendId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+  @@map("friends")
+}
+
+model BlockedUser {
+  id          String   @id @default(uuid())
+  blockerId   String  @map("blocker_id")
+  blocker     User     @relation("BlockingUser", fields: [blockerId], references: [id], onDelete: Cascade)
+  
+  blockedId   String  @map("blocked_id")
+  blocked     User     @relation("BlockedUser", fields: [blockedId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+  @@map("blocked_users")
+}
+
+// ============================================
+// CONVERSATIONS
+// ============================================
 
 model Conversation {
-  id       Int      @id @default(autoincrement())
-  type     enum('Direct', 'Group') @default("Direct")
-    members  User[]
-  messages String[]
-
-  title    String?
-  creatorId  Int?
-  avatar   String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  type            ConversationType
+  
+  // For group chats
+  name            String?
+  avatar          String?  @map("avatar")
+  
+  createdBy       String?  @map("created_by")  // User ID who created the group
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  lastMessageAt   DateTime? @map("last_message_at")
+  
+  // Relations
+  members         ConversationMember[]
+  messages        Message[]
+  calls           Call[]
+  
+  @@index([type])
+  @@index([lastMessageAt])
+  @@map("conversations")
 }
 
+model ConversationMember {
+  id                String   @id @default(uuid())
+  conversationId    String  @map("conversation_id")
+  conversation      Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  userId            String  @map("user_id")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  role              MemberRole @default(MEMBER) @map("role")
+  
+  // Read tracking
+  lastReadMessageId String? @map("last_read_message_id")
+  unreadCount       Int      @default(0) @map("unread_count")
+  
+  // Notification settings
+  isMuted           Boolean  @default(false) @map("is_muted")
+  
+  joinedAt          DateTime @default(now()) @map("joined_at")
+  
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@index([conversationId])
+  @@index([isMuted])
+  @@map("conversation_members")
+}
+
+// ============================================
+// MESSAGES
+// ============================================
+
 model Message {
-  id             Int      @id @default(autoincrement())
-  senderId       Int
-  content        String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String   @id @default(uuid())
+  conversationId    String  @map("conversation_id")
+  conversation      Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  senderId          String  @map("sender_id")
+  sender            User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  
+  // Content
+  type              MessageType @map("type")
+  content           String?  // Text content
+  
+  // Reply feature
+  replyToId         String? @map("reply_to_id")
+  replyTo           Message? @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies           Message[] @relation("MessageReplies")
+  
+  // Status
+  isEdited          Boolean  @default(false) @map("is_edited")
+  editedAt          DateTime? @map("edited_at")
+  isDeleted         Boolean  @default(false) @map("is_deleted")
+  deletedAt         DateTime? @map("deleted_at")
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  attachments       MessageAttachment[]
+  reactions         MessageReaction[]
+  readBy            MessageRead[]
+  
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@map("messages")
+}
+
+model MessageAttachment {
+  id          String   @id @default(uuid())
+  messageId   String  @map("message_id")
+  message     Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  
+  type        AttachmentType @map("type")
+  url         String
+  thumbnailUrl String? @map("thumbnail_url")
+  
+  // Metadata
+  fileName    String? @map("file_name")
+  fileSize    Int? @map("file_size")
+  mimeType    String? @map("mime_type")
+  
+  // For images/videos
+  width       Int?
+  height      Int?
+  duration    Int?  // seconds for video/audio
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  @@index([messageId])
+  @@map("message_attachments")
+}
+
+model MessageReaction {
+  id          String   @id @default(uuid())
+  messageId   String  @map("message_id")
+  message     Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  
+  userId      String  @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  emoji       String
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
+  @@map("message_reactions")
+}
+
+model MessageRead {
+  id          String   @id @default(uuid())
+  messageId   String  @map("message_id")
+  message     Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  
+  userId      String   @map("user_id") // Who read the message
+  readAt      DateTime @default(now()) @map("read_at")
+  
+  @@unique([messageId, userId])
+  @@index([messageId])
+  @@index([userId])
+  @@map("message_reads")
+}
+
+// ============================================
+// VOICE/VIDEO CALLS
+// ============================================
+
+model Call {
+  id              String   @id @default(uuid())
+  conversationId  String  @map("conversation_id")
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  initiatorId     String  @map("initiator_id")
+  initiator       User     @relation("CallInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  
+  type            CallType @map("type")
+  status          CallStatus @default(INITIATED) @map("status")
+  
+  // Call timing
+  startedAt       DateTime? @map("started_at")
+  endedAt         DateTime? @map("ended_at")
+  duration        Int?     // seconds
+  
+  // WebRTC signaling
+  roomId          String?  @map("room_id") // Room ID for WebRTC
+  
+  createdAt       DateTime @default(now()) @map("created_at")
+  
+  participants    CallParticipant[]
+  
+  @@index([conversationId])
+  @@index([initiatorId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("calls")
+}
+
+model CallParticipant {
+  id          String   @id @default(uuid())
+  callId      String  @map("call_id")
+  call        Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+  
+  userId      String  @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  status      ParticipantStatus @default(RINGING) @map("status")
+  
+  joinedAt    DateTime? @map("joined_at")
+  leftAt      DateTime? @map("left_at")
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  @@index([callId])
+  @@index([userId])
+  @@map("call_participants")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+enum ConversationType {
+  DIRECT    // 1-on-1 chat
+  GROUP     // Group chat
+}
+
+enum MemberRole {
+  ADMIN     // Can add/remove members, change settings
+  MEMBER    // Regular member
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+  SYSTEM    // System messages like "User joined", "User left"
+}
+
+enum AttachmentType {
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+}
+
+enum CallType {
+  AUDIO
+  VIDEO
+}
+
+enum CallStatus {
+  INITIATED   // Call created
+  RINGING     // Ringing
+  ONGOING     // Call in progress
+  ENDED       // Call ended normally
+  MISSED      // Call was not answered
+  DECLINED    // Call was declined
+  FAILED      // Call failed due to error
+}
+
+enum ParticipantStatus {
+  RINGING     // Being called
+  JOINED      // Joined the call
+  LEFT        // Left the call
+  DECLINED    // Declined the call
+  MISSED      // Missed the call
 }
